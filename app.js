@@ -1,8 +1,6 @@
 const Discord = require("discord.js");
 const express = require('express');
 const bodyParser = require('body-parser');
-const steem = require("steem");
-var wlsjs = require('@whaleshares/wlsjs');
 var moment = require('moment');
 
 const { mongoose } = require('./db.js');
@@ -10,13 +8,11 @@ const { Giveaway } = require('./models/giveaway')
 const config = require("./config");
 const package = require("./package.json");
 
+const channelConfig = '🧟│bot-test';
+const channelGiveaway = '🤖│botdev';
 
 const bot = new Discord.Client({
     disableEveryone: true
-});
-
-wlsjs.api.setOptions({
-    url: 'https://pubrpc.whaleshares.io/'
 });
 
 bot.login(config.token);
@@ -25,12 +21,6 @@ const app = express();
 app.use(bodyParser.json());
 
 const giveaway = [];
-
-var server = app.listen(process.env.PORT, "0.0.0.0", () => {
-    const host = server.address().address;
-    const port = server.address().port;
-    console.log('Web server started at http://%s:%s', host, port);
-});
 
 bot.on("ready", async () => {
     console.log(`Bot is ready ${bot.user.username}`);
@@ -50,13 +40,13 @@ bot.on("message", async msg => {
         //console.log(msg.author.bot);
         if (msg.author.bot) {
             //console.log(msg.embeds.length);
-            if (msg.channel.name === "giveaway") return;
+            if (msg.channel.name === channelConfig) return;
             if (msg.content.indexOf(':tada: Congratulations') === 0) return;
             if (msg.content.indexOf(':tada: Giveaway') === 0) return;
 
             if(msg.embeds.length === 0) return;
 
-            if (msg.embeds[0].title == ':tada: Neoxian City Giveaway :tada:') {
+            if (msg.embeds[0].title == ':tada: 3DK Render Giveaway :tada:') {
 
                 var giveawayID = msg.embeds[0].footer.text.split(" ")[1];
                 console.log(` giveawayID: ${giveawayID}`);
@@ -75,7 +65,7 @@ bot.on("message", async msg => {
                             setIntervalX(function () {
                                 msg.edit({
                                     "embed": {
-                                        "title": ":tada: Neoxian City Giveaway :tada:",
+                                        "title": ":tada: 3DK Render Giveaway :tada:",
                                         "description": msg.embeds[0].description,
                                         "url": "",
                                         "color": 2146335,
@@ -118,7 +108,7 @@ bot.on("message", async msg => {
 
                                         msg.edit({
                                             "embed": {
-                                                "title": ":tada: Neoxian City Giveaway :tada:",
+                                                "title": ":tada: 3DK Render Giveaway :tada:",
                                                 "description": msg.embeds[0].description,
                                                 "url": "",
                                                 "color": 2146335,
@@ -169,7 +159,7 @@ bot.on("message", async msg => {
 
                                     msg.edit({
                                         "embed": {
-                                            "title": ":tada: Neoxian City Giveaway :tada:",
+                                            "title": ":tada: 3DK Render Giveaway :tada:",
                                             "description": msg.embeds[0].description,
                                             "url": "",
                                             "color": 2146335,
@@ -221,18 +211,18 @@ bot.on("message", async msg => {
 
         if (msg.channel.type === "dm") return;
 
-        if (msg.channel.name === "post-promotion" || msg.channel.name === "hunts" || msg.channel.name === "dragon-posts" || msg.channel.name === "whaleshares-post-promotion" || msg.channel.name === "giveaway-post-candidates") {
-            checkPosts(msg);
-        }
-        if (msg.channel.name === "play-with-bots") {
+        // if (msg.channel.name === "post-promotion" || msg.channel.name === "hunts" || msg.channel.name === "dragon-posts" || msg.channel.name === "whaleshares-post-promotion" || msg.channel.name === "giveaway-post-candidates") {
+        //     checkPosts(msg);
+        // }
+        if (msg.channel.name === channelGiveaway) {
             //console.log(msg);
-            if (msg.content.indexOf('$neox') === 0) {
+            if (msg.content.indexOf('$3dk') === 0) {
                 msg.reply(`Hi I'm the Neox Bot version ${package.version}.`);
                 //msg.react('🎉');
             }
         }
 
-        if (msg.channel.name === "giveaway") {
+        if (msg.channel.name === channelGiveaway) {
 
             Giveaway.findOne(
                 { status: 'started', initiatorID: msg.author.id },
@@ -243,7 +233,7 @@ bot.on("message", async msg => {
 
                     if (data) {
                         //console.log(data);
-                        if (msg.content.indexOf('$neox gcreate') == 0) {
+                        if (msg.content.indexOf('$3dk gcreate') == 0) {
 
                             msg.channel.send(`You have already initiated a giveaway. You cannot initiate one more in parallel. If you would like to cancel the current giveaway, reply with a command  ` + '`' + `cancel` + '`' + ``);
 
@@ -257,7 +247,7 @@ bot.on("message", async msg => {
                                     console.log(err);
                                 }
                                 else {
-                                    msg.channel.send(`Previous giveaway has been successfully marked as deleted. You can now start a new giveaway with the command ` + '`' + `$neox gcreate` + '`' + `.`);
+                                    msg.channel.send(`Previous giveaway has been successfully marked as deleted. You can now start a new giveaway with the command ` + '`' + `$3dk gcreate` + '`' + `.`);
                                 }
 
                             });
@@ -370,7 +360,7 @@ bot.on("message", async msg => {
                                                 var timeRemaining = `Time Remaining: ${value.duration} minutes`;
                                                 bot.channels.get(ch).send({
                                                     "embed": {
-                                                        "title": ":tada: Neoxian City Giveaway :tada:",
+                                                        "title": ":tada: 3DK Render Giveaway :tada:",
                                                         "description": value.prize,
                                                         "url": "",
                                                         "color": 2146335,
@@ -410,7 +400,7 @@ bot.on("message", async msg => {
 
 
                     } else {
-                        if (msg.content.indexOf('$neox gcreate') == 0) {
+                        if (msg.content.indexOf('$3dk gcreate') == 0) {
                             console.log('no data');
                             var giveaway = new Giveaway({
                                 initiatorID: msg.author.id,
@@ -438,7 +428,7 @@ bot.on("message", async msg => {
                             })
                         }
                         else {
-                            msg.channel.send(`This is not a valid command. Please use ` + '`' + `$neox gcreate` + '`' + ` to initiate a giveaway.`);
+                            // msg.channel.send(`This is not a valid command. Please use ` + '`' + `$3dk gcreate` + '`' + ` to initiate a giveaway.`);
                         }
 
                     }
@@ -456,113 +446,6 @@ bot.on("message", async msg => {
 
 });
 
-function checkPosts(msg) {
-
-    var url = msg.content.match(/\bhttps?:\/\/\S+/gi);
-    // Check if the URL is null or not
-    if (url === null) {
-        return;
-    }
-
-    let isPostValid = !!url[0].match(
-        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g
-    );
-    //console.log(isPostValid);
-
-    var postValue = url[0];
-    var postAuthor = postValue.split("@")[1].split("/")[0];
-    postLink = url[0].split('@')[1].split('/')[1].split('?')[0];
-
-
-    if (isPostValid === true) {
-        if (msg.channel.name === "post-promotion" || msg.channel.name === "hunts" || msg.channel.name === "dragon-posts" || msg.channel.name === "giveaway-post-candidates") {
-
-            getSteemPostDetails(postAuthor, postLink)
-                .then(function (date) {
-
-                    const now = moment();
-                    const created = moment(date);
-                    // get the difference between the moments
-                    const diff = now.diff(created);
-
-                    console.log(moment(msg.createdTimestamp));
-
-                    //express as a duration
-                    const diffDuration = moment.duration(diff);
-
-                    var message = `This post was created ${diffDuration.days()} days, ${diffDuration.hours()} hours, ${diffDuration.minutes()} mins ago. (${moment(date).format('MMMM Do YYYY, h:mm:ss a')})`;
-                    console.log(message);
-                    msg.reply(message);
-
-                }).catch(function (e) {
-                    console.log(e);
-                })
-
-        }
-        if (msg.channel.name === "whaleshares-post-promotion") {
-
-            getWlsPostDetails(postAuthor, postLink)
-                .then(function (date) {
-
-                    const now = moment();
-                    console.log(now);
-                    const created = moment(date);
-
-                    // get the difference between the moments
-                    const diff = now.diff(created);
-
-                    //express as a duration
-                    const diffDuration = moment.duration(diff);
-
-                    var message = `This post was created ${diffDuration.days()} days, ${diffDuration.hours()} hours, ${diffDuration.minutes()} mins ago. (${moment(date).format('MMMM Do YYYY, h:mm:ss a')})`;
-                    console.log(message);
-                    msg.reply(message);
-
-                }).catch(function (e) {
-                    console.log(e);
-                })
-
-        }
-
-    } else {
-        message.channel.send('The post link you have entered is invalid. Please share only valid links in this channel.');
-        return null;
-    }
-}
-
-function getSteemPostDetails(postAuthor, postLink) {
-    return new Promise(function (yes, no) {
-        steem.api.getContent(postAuthor, postLink, (err, result) => {
-            if (err) {
-                console.log(err);
-                no(err);
-            } else
-                if (result) {
-
-                    yes(result.created);
-                }
-
-
-        });
-    });
-}
-
-function getWlsPostDetails(postAuthor, postLink) {
-    return new Promise(function (yes, no) {
-        wlsjs.api.getContent(postAuthor, postLink, (err, result) => {
-            if (err) {
-                console.log(err);
-                no(err);
-            } else
-                if (result) {
-
-                    yes(result.created);
-                }
-
-
-        });
-    });
-}
 
 function setIntervalX(callback, delay, repetitions) {
     var x = 0;

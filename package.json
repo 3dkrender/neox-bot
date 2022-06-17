@@ -9,11 +9,9 @@
   "author": "Balasubramanian Srinivasan",
   "license": "ISC",
   "dependencies": {
-    "@whaleshares/wlsjs": "^0.1.4",
     "discord.js": "^11.4.2",
     "express": "^4.16.4",
     "moment": "^2.24.0",
-    "mongoose": "^5.5.4",
-    "steem": "^0.7.4"
+    "mongoose": "^5.5.4"
   }
 }
